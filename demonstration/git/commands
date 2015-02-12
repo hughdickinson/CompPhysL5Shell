@@ -1,0 +1,80 @@
+# Git demonstration material from Lecture 5
+
+# Perform initial setup:
+# ======================
+# Set global configuration values for user.email and user.name
+# or git will complain when we try to commit our changes
+
+git config --global user.email "incognito@noplace.com"
+git config --global user.name "Lord Lucan"
+
+# Create a "bare" clone of the repository that hould have been created at:
+# /home/computationalphysics/Documents/cPlusPlus/myProjects
+#
+# This will act as our "remote" repository. A "bare" repository is required
+# in order to demonstrate the push functionality, but don't worry about it
+#otherwise 
+
+git clone --bare file:///home/computationalphysics/Documents/cPlusPlus/myProjects /home/computationalphysics/Documents/cPlusPlus/myProjectsBare
+
+# Now create two clones of the "bare" repository 
+git clone file:///home/computationalphysics/Documents/cPlusPlus/myProjectsBare firstClone
+
+git clone file:///home/computationalphysics/Documents/cPlusPlus/myProjectsBare secondClone
+
+ls -R
+
+# Modify the state of the first clone:
+# ====================================
+# Navigate to the original repository location and create a new file
+cd firstClone
+echo "PING" > tableTennis
+
+# Examine the contents of the file
+cat tableTennis
+
+# Stage and commit this new file.
+git add tableTennis
+git commit -m"Added tableTennis for git pull/push demo"
+
+# Update the "remote" repository to reflect our modifications:
+# ============================================================
+# Use git push to update the "bare" repository to reflect
+# our commited modifications.
+git push
+
+# Verify that the "remote" repository way updated:
+# ================================================
+# Navigate back to the second cloned directory
+cd ../secondClone
+ls
+
+# Using git pull to update the local working directory
+# to reflect the current state of the "remote" repository.
+git pull
+ls
+
+# Add another line to the "tableTennis" file
+echo "PONG" >> tableTennis
+
+# Stage and commit this new file.
+git add tableTennis
+git commit -m"Updated tableTennis - watch out for that wicked spin\!"
+
+# Use git push to update the "bare" repository to reflect
+# our commited modifications.
+git push
+
+
+# then navigate back to the second cloned directory
+cd ../firstClone
+ls
+
+# Examine the contents of "tableTennis"
+cat tableTennis
+
+# Nothing's changed! We still need to execute git pull to
+# update the working directory's contents
+git pull
+cat tableTennis
+
